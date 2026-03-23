@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shopping Cart</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #2d3748;
+      margin-bottom: 24px;
+      font-size: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+
+    thead {
+      background: #4a5568;
+      color: white;
+    }
+
+    thead th {
+      padding: 12px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    tbody tr:hover {
+      background: #f7fafc;
+    }
+
+    tbody td {
+      padding: 12px;
+      color: #2d3748;
+      font-size: 15px;
+    }
+
+    .subtotal {
+      color: #718096;
+      font-size: 13px;
+    }
+
+    .total-card {
+      background: #2d3748;
+      color: white;
+      border-radius: 8px;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .total-card span:first-child {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .total-card span:last-child {
+      font-size: 22px;
+      font-weight: bold;
+      color: #68d391;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #ebf8ff;
+      color: #2b6cb0;
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🛒 Shopping Cart</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price (₹)</th>
+          <th>Quantity</th>
+          <th>Subtotal (₹)</th>
+        </tr>
+      </thead>
+      <tbody id="cartBody"></tbody>
+    </table>
+
+    <div class="total-card">
+      <span>Total Amount</span>
+      <span id="totalPrice"></span>
+    </div>
+  </div>
+
+  <script>
+    // Initial cart
+    let shoppingCart = [
+      { productname: "shampoo",    price: 200, quantity: 2 },
+      { productname: "soap",       price: 100, quantity: 1 },
+    ];
+
+    // Add new product
+    shoppingCart.push({ productname: "toothpaste", price: 150, quantity: 3 });
+
+    // Remove soap
+    shoppingCart = shoppingCart.filter(function(item) {
+      return item.productname !== "soap";
+    });
+
+    // Update quantity
+    function updateQuantity(productname, newQuantity) {
+      shoppingCart.forEach(function(item) {
+        if (item.productname === productname) {
+          item.quantity = newQuantity;
+        }
+      });
+    }
+    updateQuantity("shampoo", 3);
+
+    // Calculate total
+    let shoppingCartTotal = shoppingCart.reduce(function(total, item) {
+      return total + item.price * item.quantity;
+    }, 0);
+
+    // Render table rows
+    let cartBody = document.getElementById("cartBody");
+    shoppingCart.forEach(function(item) {
+      let subtotal = item.price * item.quantity;
+      let row = document.createElement("tr");
+      row.innerHTML = `
+        <td><strong>${item.productname.charAt(0).toUpperCase() + item.productname.slice(1)}</strong></td>
+        <td>₹${item.price}</td>
+        <td><span class="badge">${item.quantity}</span></td>
+        <td>₹${subtotal}</td>
+      `;
+      cartBody.appendChild(row);
+    });
+
+    // Show total
+    document.getElementById("totalPrice").textContent = "₹" + shoppingCartTotal;
+  </script>
+
+</body>
+</html>
